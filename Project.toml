@@ -1,0 +1,11 @@
+name = "VideoLoader"
+uuid = "2449d061-5798-4da8-82d9-8b2cc650caa3"
+authors = ["yiyuezhuo <yiyuezhuo@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
+Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+VideoIO = "d6d074c3-1acf-5d4c-9a43-ef38773959a2"
