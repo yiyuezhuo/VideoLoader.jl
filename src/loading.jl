@@ -18,7 +18,10 @@ function Video(avi::VideoIO.AVInput)
 end
 
 function Video(path::String)
-    Video(VideoIO.open(path))
+    f = VideoIO.open(path)
+    v = Video(f)
+    close(f)
+    v
 end
 
 struct FilesInfo
@@ -37,7 +40,6 @@ function FilesInfo(root::String)
     #info_dict = Dict{String, Video}()
     path_list = String[]
     class_str_list = String[]
-    info_list = Video[]
 
     offset = length(splitpath(root)) + 1
     idx = 1
@@ -64,11 +66,16 @@ function FilesInfo(root::String)
             # info_dict[path_key] = Video(path)
             push!(path_list, path_key)
             push!(class_str_list, class)
-            push!(info_list, Video(path))
+            # push!(info_list, Video(path))
 
             path_to_idx[path_key] = idx
             idx += 1
         end
+    end
+
+    info_list = pmap(path_list) do path_key
+        path = joinpath(root, path_key)
+        Video(path)
     end
 
     class_name_list = class_str_list |> unique |> sort
@@ -144,5 +151,6 @@ function load_frame_list(path, t, frames_per_clip)
         # push!(frame_list, Float32.(channelview(img)))
         push!(frame_list, img)
     end
+    close(f)
     frame_list
 end
