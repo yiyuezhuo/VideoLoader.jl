@@ -44,7 +44,9 @@ function make_future(loader::VideoDataLoader, path, t , frames_per_clip)
         pid = loader.workers_pid[loader.next_pid_idx]
         loader.next_pid_idx = loader.next_pid_idx % length(loader.workers_pid) + 1
     end
-    @spawnat pid load_frame_list(path, t, frames_per_clip)
+    let transform = loader.transform
+        @spawnat pid transform(load_frame_list(path, t, frames_per_clip))
+    end
 end
 
 function make_future_batch(loader::VideoDataLoader, idx::Int)
@@ -64,7 +66,8 @@ function make_future_batch(loader::VideoDataLoader, idx::Int)
 end
 
 function collect_future_list(loader::VideoDataLoader, future_list::Vector{Future})
-    cat([loader.transform(fetch(future)) for future in future_list]..., dims=5)
+    # cat([loader.transform(fetch(future)) for future in future_list]..., dims=5)
+    cat([fetch(future) for future in future_list]..., dims=5)
 end
 
 function Base.iterate(loader::VideoDataLoader)
