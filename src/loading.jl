@@ -144,12 +144,12 @@ function load_frame_list(path, t, frames_per_clip)
     stream = io.video_info[1].stream
     f = VideoIO.openvideo(io)
     seek(f, t)
-    # frame_list = Array{Float32, 3}[]
-    frame_list = Any[]
+    
+    img = read(f)
+    frame_list = [copy(img)]
     for i in 1:frames_per_clip
-        img = read(f)
-        # push!(frame_list, Float32.(channelview(img)))
-        push!(frame_list, img)
+        read!(f, img)
+        push!(frame_list, copy(img))
     end
     close(f)
     frame_list
