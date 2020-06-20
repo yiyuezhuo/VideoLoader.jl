@@ -52,7 +52,7 @@ end
 function make_future_batch(loader::VideoDataLoader, idx::Int)
     selected_length = min(length(loader.dataset)-idx, 
                           loader.batch_size, 
-                          length(loader.dataset.file_info.path_list) * loader.clip_per_video_epoch - idx)
+                          length(loader.dataset.files_info.path_list) * loader.clip_per_video_epoch - idx)
     future_list = Future[]
     cls_list = Int[]
     for i in idx:(idx+selected_length-1)

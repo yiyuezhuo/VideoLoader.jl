@@ -137,14 +137,14 @@ function Dataset(files_info::FilesInfo; frames_per_clip=15, step_between_clips=1
     Dataset(root, frames_per_clip, step_between_clips, files_info, sample_size, sample_list)
 end
 
-function Dataset(root::String)
+function Dataset(root::String; kw...)
     files_info = FilesInfo(root)
-    Dataset(files_info)
+    Dataset(files_info; kw...)
 end
 
-function Dataset(root::String, json_index_path::String)
+function Dataset(root::String, json_index_path::String; kw...)
     files_info = FilesInfo(root, json_index_path)
-    Dataset(files_info)
+    Dataset(files_info; kw...)
 end
 
 """
@@ -174,7 +174,7 @@ function load_frame_list(path, t, frames_per_clip)
 
     img = read(f)
     frame_list = [copy(img)]
-    for i in 1:frames_per_clip
+    for i in 1:(frames_per_clip-1)
         read!(f, img)
         push!(frame_list, copy(img))
     end
